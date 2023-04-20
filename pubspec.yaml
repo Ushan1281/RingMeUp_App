@@ -1,0 +1,77 @@
+name: ringmeup
+description: Application in which we can set call back reminder after user end's call.......
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  reminders: ^1.1.0
+  flutter_local_notifications: ^13.0.0
+  contacts_service: ^0.6.3
+  telephony: ^0.2.0
+  flutter_incoming_call: ^0.1.1
+  call_log: ^4.0.0
+  intl: any
+  flutter_phone_direct_caller: ^2.1.1
+  google_fonts: any
+  flutter_callkit_incoming: ^1.0.3+3
+  shared_preferences: any
+  fluttertoast: any
+  flutter_date_pickers: any
+  flutter_sms_inbox: ^1.0.2
+  permission_handler: any
+  scroll_to_index: any
+  speech_to_text: ^6.1.1
+  flutter_sms: ^2.3.3
+  phone_state: ^1.0.2
+  overlay_dialog: ^0.2.1
+
+
+
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  reminders: ^1.1.0
+  flutter_local_notifications: ^13.0.0
+  contacts_service: ^0.6.3
+  telephony: ^0.2.0
+  flutter_incoming_call: ^0.1.1
+  call_log: ^4.0.0
+  intl: any
+  flutter_phone_direct_caller: ^2.1.1
+  google_fonts: any
+  flutter_callkit_incoming: ^1.0.3+3
+  shared_preferences: any
+  fluttertoast: any
+  flutter_date_pickers: any
+  flutter_sms_inbox: ^1.0.2
+  permission_handler: any
+  scroll_to_index: any
+  speech_to_text: ^6.1.1
+  flutter_sms: ^2.3.3
+
+
+
+
+
+
+
+
+
+flutter:
+
+
+  uses-material-design: true
+  assets:
+    - assets/
