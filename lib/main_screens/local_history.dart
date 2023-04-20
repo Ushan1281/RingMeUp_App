@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class local_history extends StatefulWidget {
   const local_history({Key? key}) : super(key: key);
 
@@ -7,6 +9,13 @@ class local_history extends StatefulWidget {
 }
 
 class _local_historyState extends State<local_history> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
