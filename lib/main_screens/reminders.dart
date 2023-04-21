@@ -130,7 +130,6 @@ class _remindersState extends State<reminders> with TickerProviderStateMixin{
                   //   ),
                 ],
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
@@ -208,6 +207,7 @@ class _remindersState extends State<reminders> with TickerProviderStateMixin{
         controller: tabController,
         dragStartBehavior: DragStartBehavior.start,
         children:  [
+
           local_history(),
           phonelog(),
           sms()
