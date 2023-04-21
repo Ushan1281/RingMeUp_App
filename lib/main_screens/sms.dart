@@ -26,13 +26,9 @@ class _smsState extends State<sms> {
   final scrollDirection = Axis.vertical;
   AutoScrollController controller = AutoScrollController();
 
-
-
   @override
   void initState() {
     super.initState();
-
-
     loadSms();
     controller = AutoScrollController(
         viewportBoundaryGetter: () =>
@@ -69,6 +65,7 @@ class _smsState extends State<sms> {
       loadSms();
     });
   }
+
   TextEditingController smsContain=TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -163,8 +160,7 @@ class _smsState extends State<sms> {
                                               Container(
                                                 child: ElevatedButton(
                                                   onPressed: (){
-                                                    _saveList();
-                                                    _myList.add(message.sender.toString());
+
                                                     NotificationServices().setNotification(
                                                       title: 'SMS Reminder',
                                                       body: 'You Have To SMS '+message.sender.toString(),
