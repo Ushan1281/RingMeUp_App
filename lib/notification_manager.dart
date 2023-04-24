@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -25,10 +26,18 @@ class NotificationServices{
     return NotificationDetails(
       android: AndroidNotificationDetails('channelId','ChannelName',
         importance: Importance.max,playSound: true,priority: Priority.high,
-          progress: 0)
+          progress: 0),
+
+
     );
   }
 
+  Button(){
+    return NotificationActionButton(
+      key: "open",
+      label: "Open File",
+    );
+  }
   Future showNotification(
   {int id =0, String? title, String? body,String?  payload }
   ) async{
@@ -41,7 +50,7 @@ class NotificationServices{
       {int id =0, String? title, String? body,String? payload,var scheduleTime}
       ) async{
     return notificationsPlugin.schedule(
-        id, title,  body, scheduleTime,notificationDetails(),
+        id, title, body, scheduleTime,notificationDetails(),
          androidAllowWhileIdle: true
     );
   }

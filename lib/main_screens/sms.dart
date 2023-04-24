@@ -42,7 +42,7 @@ class _smsState extends State<sms> {
       final messages = await _query.querySms(
         kinds: [SmsQueryKind.inbox, SmsQueryKind.draft,SmsQueryKind.sent,],
 
-        count: 3000,
+
       );
       // Look up the contact associated with the sender's phone number
 
@@ -281,7 +281,7 @@ class _smsState extends State<sms> {
                                         SizedBox(height: 20,),
                                         InkWell(
                                           onTap: () async{
-                                            String mes = "This is a test message!";
+                                            String mes = "Can't talk nowMessage me.";
                                             List<String> recipents =
                                             [message.sender.toString()];
                                             String _result = await sendSMS(message: mes, recipients: recipents, sendDirect: true)
@@ -297,16 +297,18 @@ class _smsState extends State<sms> {
                                                 textColor: Colors.deepPurpleAccent,
                                                 fontSize: 16.0
                                             );
+                                            Navigator.pop(context);
                                           },
                                           child: Container(
                                             height: 30,
-                                            width: 200,
+                                            width: 230,
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.all
                                                 (Radius.circular(3)),
-                                              color: Colors.cyan.shade100
+
                                             ),
-                                            child: Text("This is a test message!",
+                                            child: Text("Can't talk now "
+                                                "Message me.",
                                               style: TextStyle(
                                                   fontFamily: "Rubik",
                                                   fontSize: 20,
@@ -323,8 +325,29 @@ class _smsState extends State<sms> {
                                              borderRadius: BorderRadius.all(Radius.circular(8),),
                                              color: Colors.cyan.shade100
                                          ),
-                                           child: TextFormField(
+                                           child: TextField(
                                              controller: smsContain,
+                                             textInputAction: TextInputAction.go,
+                                             onSubmitted: (value) async{
+                                               String mes = smsContain.text;
+                                               List<String> recipents =
+                                               [message.sender.toString()];
+                                               String _result = await sendSMS(message: mes, recipients: recipents, sendDirect: true)
+                                                   .catchError((onError) {
+                                                 print(onError);
+                                               });
+                                               print(smsContain.text);
+                                               print(_result);
+                                               Fluttertoast.showToast(
+                                                   msg: "SMS Sent!",
+                                                   toastLength: Toast.LENGTH_SHORT,
+                                                   timeInSecForIosWeb: 3,
+                                                   backgroundColor: Colors.white,
+                                                   textColor: Colors.deepPurpleAccent,
+                                                   fontSize: 16.0
+                                               );
+                                               Navigator.pop(context);
+                                             },
                                              textAlign: TextAlign.center,
                                              decoration: InputDecoration(
                                                border: InputBorder.none,
@@ -332,7 +355,6 @@ class _smsState extends State<sms> {
                                              ),
                                            ),
                                         ),
-
                                        )
                                       ],
                                     ),

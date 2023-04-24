@@ -5,6 +5,7 @@
 import FlutterMacOS
 import Foundation
 
+import awesome_notifications
 import flutter_local_notifications
 import path_provider_foundation
 import reminders
@@ -13,6 +14,7 @@ import speech_to_text_macos
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  AwesomeNotificationsPlugin.register(with: registry.registrar(forPlugin: "AwesomeNotificationsPlugin"))
   FlutterLocalNotificationsPlugin.register(with: registry.registrar(forPlugin: "FlutterLocalNotificationsPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
   RemindersPlugin.register(with: registry.registrar(forPlugin: "RemindersPlugin"))

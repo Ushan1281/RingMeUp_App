@@ -22,7 +22,7 @@ class _remindersState extends State<reminders> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    TabController tabController = TabController(length:3, vsync: this);
+    TabController tabController = TabController(length:2, vsync: this);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white24,
@@ -145,21 +145,21 @@ class _remindersState extends State<reminders> with TickerProviderStateMixin{
                     unselectedLabelColor:const Color.fromRGBO(227, 227, 227, 1),
                     labelColor:  const Color.fromRGBO(36, 43, 105, 1),
                     tabs: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 90),
-                        child: Tab(
-                          child: Text(
-                            'History',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Maven Pro',
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              height: 1.3,
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 90),
+                      //   child: Tab(
+                      //     child: Text(
+                      //       'History',
+                      //       textAlign: TextAlign.center,
+                      //       style: TextStyle(
+                      //         fontFamily: 'Maven Pro',
+                      //         fontSize: 20,
+                      //         fontWeight: FontWeight.bold,
+                      //         height: 1.3,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
                         child: Tab(child: Text(
@@ -208,7 +208,7 @@ class _remindersState extends State<reminders> with TickerProviderStateMixin{
         dragStartBehavior: DragStartBehavior.start,
         children:  [
 
-          local_history(),
+          //local_history(),
           phonelog(),
           sms()
         ],

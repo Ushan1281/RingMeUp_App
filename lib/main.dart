@@ -1,3 +1,4 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_dialog/overlay_dialog.dart';
 import 'package:ringmeup/main_screens/reminders.dart';
@@ -5,39 +6,41 @@ import 'package:telephony/telephony.dart';
 import 'package:phone_state/phone_state.dart';
 import 'notification_manager.dart';
 
+void backgroundFetchHeadlessTask(HeadlessTask task) async {
+  String taskId = task.taskId;
+  bool isTimeout = task.timeout;
+  if (isTimeout) {
+    // This task has exceeded its allowed running-time.
+    // You must stop what you're doing and immediately .finish(taskId)
+    print("[BackgroundFetch] Headless task timed-out: $taskId");
+    BackgroundFetch.finish(taskId);
+    return;
+  }
+  print('[BackgroundFetch] Headless event received.');
+  // Do your work here...
+  PhoneState.phoneStateStream;
+  PhoneState.phoneStateStream.listen((event) {
+    if (event == PhoneStateStatus.CALL_INCOMING) {
+      NotificationServices().showNotification(
+        title: 'Set Call Back Reminder',
+        body: 'You Have one Incoming Call''\n''Want to add reminder',
 
+      );
+    }else if(event == PhoneStateStatus.CALL_ENDED){
+      NotificationServices().showNotification(
+        title: 'Set Call Back Reminder',
+        body: 'You ended incoming call!!''\n''Want to add reminder',
+      );
+    }
+    else{
+      print("Error");
+    }
+  });
+  BackgroundFetch.finish(taskId);
+}
 // NotificationServices notification=NotificationServices();
 void main() async{
    WidgetsFlutterBinding.ensureInitialized();
-  // await BackgroundFetch.configure(
-  // BackgroundFetchConfig(
-  // minimumFetchInterval: 15,
-  // stopOnTerminate: false,
-  // enableHeadless: true,
-  // requiresBatteryNotLow: false,
-  // requiresCharging: false,
-  // requiresStorageNotLow: false,
-  // requiresDeviceIdle: false,
-  // startOnBoot: true,
-  // ),
-  // (String taskId) async {
-  //   PhoneState.phoneStateStream.listen((event) {
-  //     if (event == PhoneStateStatus.CALL_ENDED) {
-  //       NotificationServices().showNotification(
-  //         title: 'Set Call Back Reminder',
-  //         body: 'You Have one Incoming Call',
-  //       );
-  //     }else if(event == PhoneStateStatus.CALL_INCOMING){
-  //       NotificationServices().showNotification(
-  //         title: 'Set Call Back Reminder',
-  //         body: 'You Have one Incoming Call',
-  //       );
-  //     }
-  //   });
-  // print('Background task started: $taskId');
-  // BackgroundFetch.finish(taskId);
-  // },
-  // );
    PhoneState.phoneStateStream;
    PhoneState.phoneStateStream.listen((event) {
      if (event == PhoneStateStatus.CALL_ENDED) {
@@ -63,6 +66,7 @@ void main() async{
      }
    });
    runApp(MyApp());
+   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 
 }
 class MyApp extends StatefulWidget {

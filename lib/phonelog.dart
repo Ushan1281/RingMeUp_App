@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:ringmeup/notification_manager.dart';
@@ -160,6 +161,9 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                          body: 'You Have To ''Call '+snapshot.data!.elementAt(index).name.toString(),
                                                          scheduleTime: DateTime.now().add(Duration(seconds: 2)),
                                                      );
+
+
+
                                                      Fluttertoast.showToast(
                                                          msg: "Reminder is Set For After 5-Min",
                                                          toastLength: Toast.LENGTH_SHORT,
