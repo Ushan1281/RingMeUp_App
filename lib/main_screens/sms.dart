@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -9,7 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../notification_manager.dart';
-import 'localdata.dart';
+
 
 
 class sms extends StatefulWidget {
@@ -41,12 +39,8 @@ class _smsState extends State<sms> {
     if (permission.isGranted) {
       final messages = await _query.querySms(
         kinds: [SmsQueryKind.inbox, SmsQueryKind.draft,SmsQueryKind.sent,],
-
-
       );
       // Look up the contact associated with the sender's phone number
-
-
       debugPrint('sms inbox messages: ${messages.length}');
       setState(() => _messages = messages);
     } else {

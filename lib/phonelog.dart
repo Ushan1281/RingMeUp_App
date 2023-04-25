@@ -1,10 +1,33 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:ringmeup/notification_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import './calllog.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+
+class Person {
+  String title;
+  String callerName;
+  String remTime;
+
+  Person({required this.title, required this.callerName,required this.remTime});
+
+  // Convert the Person object to a JSON map
+  Map<String, dynamic> toJson() => {'title': title, 'callerName': callerName,
+    'remTime':remTime};
+
+  // Create a Person object from a JSON map
+  factory Person.fromJson(Map<String, dynamic> json) {
+    return Person(
+      title: json['title'],
+      callerName: json['callerName'],
+      remTime: json['remTime']
+    );
+  }
+}
+
+
 class phonelog extends StatefulWidget {
   @override
   _phonelogState createState() => _phonelogState();
@@ -30,17 +53,34 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
       cl.getCallLogs();});
   }
 
+
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
-
     if (AppLifecycleState.resumed == state){
       setState(() {
        cl.getCallLogs();
       });
     }
+  }
 
+  // Initial Selected Value
+  String dropdownvalue = '30 Minutes';
+
+  // List of items in our dropdown menu
+  List<int> items = [5,10,15,30,45,60];
+  int _selectedMinutes = TimeOfDay.now().minute;
+  int? newTime;
+
+  List<Person> persons = [];
+// Save a list of Person objects to local storage
+  void _saveData() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> personsJson = persons.map((p) => jsonEncode(p.toJson()))
+        .toList();
+    prefs.setStringList('persons', personsJson);
   }
 
   @override
@@ -68,22 +108,31 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                             .duration!)),
                         isThreeLine: true,
                         trailing: ElevatedButton(
-                          onPressed: () {
-                           /*
-                           if(title=call || title=sms)
-                           1 title: call / sms
-                           2 name
-                           3 reminder time
-                           4 created time
-                           */
+                          onLongPress: (){
+                             setState(() {
+                               showTimePicker(
+                                   context: context,
+                                   initialTime: TimeOfDay.now()
+                               );
+                             });
+                          },
+                          onPressed: () async{
                           NotificationServices().setNotification(
                               title: 'Call Reminder',
                               body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                               scheduleTime:DateTime.now().add(Duration
-                                (minutes: 30)),
+                                (seconds: _selectedMinutes)),
                           );
+
+                            persons.add(Person(title: 'Call Reminder',
+                              callerName: '${snapshot.data!.elementAt(index)
+                                  .name.toString()}', remTime: '${'$_selectedMinutes minutes'}',));
+                            _saveData();
+
+
                           Fluttertoast.showToast(
-                              msg: "Reminder is Set For After 30-Min",
+                              msg: "Reminder is Set For After "
+                                  "$_selectedMinutes Minutes",
                               toastLength: Toast.LENGTH_SHORT,
                               timeInSecForIosWeb: 3,
                               backgroundColor: Colors.white,
@@ -91,7 +140,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                               fontSize: 16.0
                           );
                         },child:
-                        Text("SET 30 Min"),
+                        Text("SET $_selectedMinutes Min"),
                         ),
                       ),
                     ), onTap: (){
@@ -155,15 +204,18 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                children: [
                                                  Container(
                                                    child: ElevatedButton(
-                                                       onPressed: (){
+                                                       onPressed: ()async{
                                                      NotificationServices().setNotification(
                                                          title: 'Call Reminder',
-                                                         body: 'You Have To ''Call '+snapshot.data!.elementAt(index).name.toString(),
+                                                         body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                          scheduleTime: DateTime.now().add(Duration(seconds: 2)),
                                                      );
 
-
-
+                                                       persons.add(Person(title: 'Call Reminder',
+                                                         callerName: '${snapshot.data!.elementAt(index)
+                                                             .name.toString()
+                                                         }', remTime: '${'5 minutes'}',));
+                                                       _saveData();
                                                      Fluttertoast.showToast(
                                                          msg: "Reminder is Set For After 5-Min",
                                                          toastLength: Toast.LENGTH_SHORT,
@@ -190,6 +242,12 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                        body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                        scheduleTime: DateTime.now().add(Duration(minutes: 10))
                                                    );
+                                                   persons.add(Person(title: 'Call Reminder',
+                                                     callerName: '${snapshot.data!.elementAt(index)
+                                                         .name.toString()
+                                                     }', remTime: '${'10 '
+                                                     'minutes'}',));
+                                                   _saveData();
                                                    Fluttertoast.showToast(
                                                        msg: "Reminder is Set For After 10-Min",
                                                        toastLength: Toast.LENGTH_SHORT,
@@ -225,6 +283,12 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                              scheduleTime:
                                                              DateTime.now().add(Duration(minutes: 30))
                                                          );
+                                                         persons.add(Person(title: 'Call Reminder',
+                                                           callerName: '${snapshot.data!.elementAt(index)
+                                                               .name.toString()
+                                                           }', remTime: '${'30'
+                                                           ' minutes'}',));
+                                                         _saveData();
                                                          Fluttertoast.showToast(
                                                              msg: "Reminder is Set For After 30-Min",
                                                              toastLength: Toast.LENGTH_SHORT,
@@ -252,6 +316,11 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                          body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                          scheduleTime: DateTime.now().add(Duration(hours: 1))
                                                        );
+                                                       persons.add(Person(title: 'Call Reminder',
+                                                         callerName: '${snapshot.data!.elementAt(index)
+                                                             .name.toString()
+                                                         }', remTime: '${'1 Hours'}',));
+                                                       _saveData();
                                                        Fluttertoast.showToast(
                                                            msg: "Reminder is Set For After 1-Hr..",
                                                            toastLength: Toast.LENGTH_SHORT,

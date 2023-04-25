@@ -36,27 +36,13 @@ dependencies:
   flutter_background: ^1.2.0
   background_fetch: ^1.1.5
   awesome_notifications: ^0.7.4+1
-
-
-
-
-
+  url_launcher: ^6.1.10
+  system_alert_window: ^1.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-
-
-
-
-
-
-
-
 flutter:
-
-
   uses-material-design: true
   assets:
     - assets/

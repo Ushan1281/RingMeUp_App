@@ -28,14 +28,10 @@ class SharedPreferencesHelper {
 class Person {
   final String name;
   final String msg;
-
   Person({required this.name, required this.msg});
-
   Map<String, dynamic> toJson() => {'name': name, 'age': msg};
-
   factory Person.fromJson(Map<String, dynamic> json) =>
       Person(
           name: json['name'], msg: json['msg']);
-  // This is a app that app can be run on the machine
-
+       // This is a app that app can be run on the machine
 }
