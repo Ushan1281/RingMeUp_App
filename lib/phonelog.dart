@@ -39,10 +39,8 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
   NotificationServices notification=NotificationServices();
   @override
   void initState(){
-    // TODO: implement initState
     super.initState();
     notification.initNotification();
-    //WidgetsBinding.instance.addObserver(this);
     cl.getCallLogs();
   }
   //text editing controller for text field
@@ -66,30 +64,23 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
     }
   }
 
-  // Initial Selected Value
-  String dropdownvalue = '30 Minutes';
-
-  // List of items in our dropdown menu
-  List<int> items = [5,10,15,30,45,60];
-  int _selectedMinutes = TimeOfDay.now().minute;
-  int? newTime;
-
   List<Person> persons = [];
 // Save a list of Person objects to local storage
   void _saveData() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> personsJson = persons.map((p) => jsonEncode(p.toJson()))
-        .toList();
-    prefs.setStringList('persons', personsJson);
+    List<String> personsJson = persons.map((p) => jsonEncode(p.toJson())).toList();
+    List<String>? personsJsonOld = prefs.getStringList('persons');
+    List<String>? newpersonJson = personsJson + personsJsonOld!;
+    prefs.setStringList('persons', newpersonJson);
   }
-
-  @override
+  int selectedValue=0;
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
        onRefresh: refresh,
         child: Column(
           children: [
+            // the Future Builder
             FutureBuilder(future:  cl.getCallLogs(),
                 builder: (context, snapshot){
               if(snapshot.connectionState == ConnectionState.done){
@@ -109,30 +100,56 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                         isThreeLine: true,
                         trailing: ElevatedButton(
                           onLongPress: (){
-                             setState(() {
-                               showTimePicker(
-                                   context: context,
-                                   initialTime: TimeOfDay.now()
-                               );
-                             });
+                               List<PopupMenuEntry<int>> menuItems = [
+                               PopupMenuItem(
+                               child: Text('5 Minutes'),
+                               value: 5,
+                               ),
+                               PopupMenuItem(
+                               child: Text('10 Minutes'),
+                               value: 10,
+                               ),
+                               PopupMenuItem(
+                               child: Text('15 Minutes'),
+                               value: 15,
+                               ),
+                                 PopupMenuItem(
+                                   child: Text('30 Minutes'),
+                                   value: 30,
+                                 ),
+                                 PopupMenuItem(
+                                   child: Text('45 Minutes'),
+                                   value: 45,
+                                 ),
+                                 PopupMenuItem(
+                                   child: Text('60 Minutes'),
+                                   value: 60,
+                                 ),
+                               ];
+                               showMenu<int>(
+                                 context: context,
+                                 position: RelativeRect.fromLTRB(100, 300, 100, 0),
+                                 items: menuItems,
+                                 initialValue: selectedValue,
+                               ).then((value) {
+                                 if (value != null) {
+                                   selectedValue = value;
+                                   // do something with the selected value
+                                 }
+                               });
                           },
                           onPressed: () async{
                           NotificationServices().setNotification(
                               title: 'Call Reminder',
                               body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                               scheduleTime:DateTime.now().add(Duration
-                                (seconds: _selectedMinutes)),
+                                (seconds: selectedValue!)),
                           );
-
-                            persons.add(Person(title: 'Call Reminder',
-                              callerName: '${snapshot.data!.elementAt(index)
-                                  .name.toString()}', remTime: '${'$_selectedMinutes minutes'}',));
-                            _saveData();
-
-
+                          persons.add(Person(title: 'Call Reminder',
+                            callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'$selectedValue minutes'}',));
+                          _saveData();
                           Fluttertoast.showToast(
-                              msg: "Reminder is Set For After "
-                                  "$_selectedMinutes Minutes",
+                              msg: "Reminder is Set For After $selectedValue Minutes",
                               toastLength: Toast.LENGTH_SHORT,
                               timeInSecForIosWeb: 3,
                               backgroundColor: Colors.white,
@@ -140,7 +157,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                               fontSize: 16.0
                           );
                         },child:
-                        Text("SET $_selectedMinutes Min"),
+                        Text("SET $selectedValue Min"),
                         ),
                       ),
                     ), onTap: (){
@@ -210,11 +227,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                          body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                          scheduleTime: DateTime.now().add(Duration(seconds: 2)),
                                                      );
-
-                                                       persons.add(Person(title: 'Call Reminder',
-                                                         callerName: '${snapshot.data!.elementAt(index)
-                                                             .name.toString()
-                                                         }', remTime: '${'5 minutes'}',));
+                                                     persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'5 minutes'}',));
                                                        _saveData();
                                                      Fluttertoast.showToast(
                                                          msg: "Reminder is Set For After 5-Min",
@@ -242,11 +255,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                        body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                        scheduleTime: DateTime.now().add(Duration(minutes: 10))
                                                    );
-                                                   persons.add(Person(title: 'Call Reminder',
-                                                     callerName: '${snapshot.data!.elementAt(index)
-                                                         .name.toString()
-                                                     }', remTime: '${'10 '
-                                                     'minutes'}',));
+                                                   persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'10 minutes'}',));
                                                    _saveData();
                                                    Fluttertoast.showToast(
                                                        msg: "Reminder is Set For After 10-Min",
@@ -283,11 +292,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                              scheduleTime:
                                                              DateTime.now().add(Duration(minutes: 30))
                                                          );
-                                                         persons.add(Person(title: 'Call Reminder',
-                                                           callerName: '${snapshot.data!.elementAt(index)
-                                                               .name.toString()
-                                                           }', remTime: '${'30'
-                                                           ' minutes'}',));
+                                                         persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'30'' minutes'}',));
                                                          _saveData();
                                                          Fluttertoast.showToast(
                                                              msg: "Reminder is Set For After 30-Min",
@@ -316,10 +321,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                          body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                          scheduleTime: DateTime.now().add(Duration(hours: 1))
                                                        );
-                                                       persons.add(Person(title: 'Call Reminder',
-                                                         callerName: '${snapshot.data!.elementAt(index)
-                                                             .name.toString()
-                                                         }', remTime: '${'1 Hours'}',));
+                                                       persons.add(Person(title: 'Call Reminder', callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'1 Hours'}',));
                                                        _saveData();
                                                        Fluttertoast.showToast(
                                                            msg: "Reminder is Set For After 1-Hr..",
@@ -330,9 +332,8 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                            fontSize: 16.0
                                                        );
                                                        Navigator.pop(context);
-                                                     }, child:
-                                                 Text("1 Hr....",
-                                                   style:TextStyle(
+                                                     }, child: Text("1 Hr....",
+                                                       style:TextStyle(
                                                        fontFamily: "Rubik",
                                                        fontSize: 16,
                                                        fontWeight: FontWeight.bold,
@@ -365,7 +366,6 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                              },
                                              child: Container(
                                                height: 30,
-
                                                decoration: BoxDecoration(
                                                    borderRadius: BorderRadius.all
                                                      (Radius.circular(3)),
@@ -377,7 +377,6 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                        fontFamily: "Rubik",
                                                        fontSize: 20,
                                                        color: Colors.black,
-
                                                    ),
                                                  ),
                                                ),
@@ -418,16 +417,12 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                      fontFamily: "Rubik",
                                                      fontSize: 20,
                                                      color: Colors.black,
-
                                                    ),
                                                  ),
                                                ),
                                              ),
-
-
                                            ),
                                            SizedBox(height: 5,),
-
                                          ],
                                        ),
                                      ),

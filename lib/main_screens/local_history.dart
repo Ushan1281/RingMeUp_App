@@ -20,37 +20,40 @@ class _local_historyState extends State<local_history> {
 
   List<Person> persons = [];
   // Load a list of Person objects from local storage
-  Future<List<Person>> _loadData() async {
+    Future<List<Person>> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
     List<String>? personsJson = prefs.getStringList('persons');
     print(personsJson!);
     return persons=personsJson.map((person) => Person.fromJson(jsonDecode(person))).toList();
-
-  }
-  Future refresh()async{
-    setState(() {
-      // Here when the user scroll down the screen it will automatically
-      // refresh the Screen and show the new content.
-      _loadData();
-    });
   }
 
   @override
   Widget build(BuildContext context) {
   return Scaffold(
-      body:RefreshIndicator(
-        onRefresh: refresh,
-        child: ListView.builder(
-          itemCount: persons.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(persons[index].title),
-              subtitle: Text('${persons[index].callerName}'),
-              trailing: Text('After ${persons[index].remTime}'),
+      body:FutureBuilder<List<Person>>(
+        future: _loadData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show a loading indicator while waiting for the data
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            // Show an error message if there was an error fetching the data
+            return Text('Error: ${snapshot.error}');
+          } else {
+
+            return ListView.builder(
+              itemCount: persons.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(persons[index].title),
+                  subtitle: Text(persons[index].callerName),
+                  trailing: Text(persons[index].remTime),
+                );
+              },
             );
-          },
-        ),
-      ),
+          }
+        },
+      )
   );
   }
 }

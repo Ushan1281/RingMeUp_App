@@ -93,28 +93,11 @@ class _MyAppState extends State<MyApp> {
     PhoneState.phoneStateStream;
     PhoneState.phoneStateStream.listen((event) {
       if (event == PhoneStateStatus.CALL_INCOMING) {
-        showOverlay((context, progress) => Container(
-          height: 200,
-          width: 200,
-          decoration: BoxDecoration(
-              color: Colors.white
-          ),
-          child: Text("hiiii"),
-        ));
         NotificationServices().showNotification(
           title: 'Set Call Back Reminder',
           body: 'You Have one Incoming Call''\n''Want to add reminder',
-
         );
       }else if(event == PhoneStateStatus.CALL_ENDED){
-        showOverlay((context, progress) => Container(
-          height: 200,
-          width: 200,
-          decoration: BoxDecoration(
-              color: Colors.white
-          ),
-          child: Text("hiiii"),
-        ));
         NotificationServices().showNotification(
           title: 'Set Call Back Reminder',
           body: 'You ended incoming call!!''\n''Want to add reminder',
