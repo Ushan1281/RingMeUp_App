@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ringmeup/main_screens/chat.dart';
-import 'package:ringmeup/main_screens/email.dart';
 import 'package:ringmeup/main_screens/sms.dart';
 import 'package:ringmeup/phonelog.dart';
 
@@ -19,8 +17,6 @@ class _home_screenState extends State<home_screen> {
   final screens = [
     reminders(),
     phonelog(),
-    email(),
-    chat(),
     sms(),
     
   ];

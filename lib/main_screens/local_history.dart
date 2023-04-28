@@ -8,9 +8,9 @@ class local_history extends StatefulWidget {
   @override
   State<local_history> createState() => _local_historyState();
 }
-
 class _local_historyState extends State<local_history> {
 
+  // InitState Function which run 1st when app start.
   @override
   void initState() {
     // TODO: implement initState
@@ -22,8 +22,7 @@ class _local_historyState extends State<local_history> {
   // Load a list of Person objects from local storage
     Future<List<Person>> _loadData() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String>? personsJson = prefs.getStringList('persons');
-    print(personsJson!);
+    List<String> personsJson = prefs.getStringList('persons')??[];
     return persons=personsJson.map((person) => Person.fromJson(jsonDecode(person))).toList();
   }
 
@@ -40,7 +39,6 @@ class _local_historyState extends State<local_history> {
             // Show an error message if there was an error fetching the data
             return Text('Error: ${snapshot.error}');
           } else {
-
             return ListView.builder(
               itemCount: persons.length,
               itemBuilder: (context, index) {

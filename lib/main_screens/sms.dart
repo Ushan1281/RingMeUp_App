@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../notification_manager.dart';
+import '../phonelog.dart';
 
 
 
@@ -61,29 +62,23 @@ class _smsState extends State<sms> {
   }
 
   TextEditingController smsContain=TextEditingController();
+
+  List<Person> persons = [];
+// Save a list of Person objects to local storage
+  void _saveData() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> personsJson = persons.map((p) => jsonEncode(p.toJson())).toList();
+    List<String>? personsJsonOld = prefs.getStringList('persons');
+    List<String>? newpersonJson = personsJson + personsJsonOld!;
+    prefs.setStringList('persons', newpersonJson);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // appBar: AppBar(
-        //   leading:  BackButton(
-        //     color: Colors.black,
-        //     onPressed: (){
-        //       Navigator.pop(context);
-        //     }
-        //   ),
-        //   backgroundColor: Colors.white,
-        //   title: Text("SMS",
-        //     style: TextStyle(
-        //         fontFamily: 'Rubik',
-        //         fontSize: 25,
-        //         fontWeight: FontWeight.bold,
-        //         color: Colors.black
-        //     ),),
-        // ),
         body: RefreshIndicator(
           onRefresh: refresh,
           child: ListView.builder(
-            // shrinkWrap: true,
             scrollDirection: scrollDirection,
             controller: controller,
             itemCount: _messages.length,
@@ -108,13 +103,13 @@ class _smsState extends State<sms> {
                         builder: (BuildContext context) => AlertDialog(
                           backgroundColor: Colors.white,
                           elevation: 40,
-                          title:  Text('  Set SMS Reminder For',
+                          title:  Text(message.sender.toString(),
                             style: TextStyle(
                                 fontFamily: 'Rubik',
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black
-                            ),),
+                            ),textAlign: TextAlign.center,),
                           content:  Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,23 +124,26 @@ class _smsState extends State<sms> {
                                   child: Center(
                                     child: Column(
                                       children: [
-                                        Text(message.sender.toString(),
-                                          style: TextStyle(
-                                              fontFamily: 'Rubik',
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black54
-                                          ),
-                                        ),
-                                        Text('After...',
-                                          style: TextStyle(
-                                              fontFamily: 'Rubik',
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                              height: 1.5
-                                          ),),
-                                        SizedBox(height: 20,),
+                                        // Row(
+                                        //   children: [
+                                        //     Text('Select a message',
+                                        //       style: TextStyle(
+                                        //         fontWeight: FontWeight.bold,
+                                        //         fontSize: 12,
+                                        //         color: Colors.black26
+                                        //       ),
+                                        //     )
+                                        //   ],
+                                        // ),
+                                        // Container(
+                                        //   height:36,
+                                        //   width: 236,
+                                        //   decoration: BoxDecoration(
+                                        //     border:Border.all(),
+                                        //     borderRadius: BorderRadius.circular(2),
+                                        //
+                                        //   ),
+                                        // ),
                                         Padding(
                                           padding: const EdgeInsets.symmetric
                                             (horizontal: 20),
@@ -154,7 +152,6 @@ class _smsState extends State<sms> {
                                               Container(
                                                 child: ElevatedButton(
                                                   onPressed: (){
-
                                                     NotificationServices().setNotification(
                                                       title: 'SMS Reminder',
                                                       body: 'You Have To SMS '+message.sender.toString(),
@@ -162,6 +159,10 @@ class _smsState extends State<sms> {
                                                       DateTime.now().add
                                                         (Duration(minutes: 5)),
                                                     );
+                                                    persons.add(Person(title:
+                                                    'SMS Reminder',callerName:
+                                                    '${message.sender.toString()}', remTime: '${'5 minutes'}',));
+                                                    _saveData();
                                                     Fluttertoast.showToast(
                                                         msg: "Reminder is Set For After 5-Min",
                                                         toastLength: Toast.LENGTH_SHORT,
@@ -188,6 +189,11 @@ class _smsState extends State<sms> {
                                                     body: 'You Have To SMS '+message.sender.toString(),
                                                     scheduleTime: DateTime.now().add(Duration(minutes: 10))
                                                 );
+                                                persons.add(Person(title:
+                                                'SMS Reminder',callerName:
+                                                '${message.sender.toString()
+                                                }', remTime: '${'10 minutes'}',));
+                                                _saveData();
                                                 Fluttertoast.showToast(
                                                     msg: "Reminder is Set For After 10-Min",
                                                     toastLength: Toast.LENGTH_SHORT,
@@ -224,6 +230,12 @@ class _smsState extends State<sms> {
                                                           scheduleTime:
                                                           DateTime.now().add(Duration(minutes: 30))
                                                       );
+                                                      persons.add(Person(title:
+                                                      'SMS Reminder',callerName:
+                                                      '${message.sender
+                                                          .toString()}',
+                                                        remTime: '${'30 minutes'}',));
+                                                      _saveData();
                                                       Fluttertoast.showToast(
                                                           msg: "Reminder is Set For After 30-Min",
                                                           toastLength: Toast.LENGTH_SHORT,
@@ -251,6 +263,13 @@ class _smsState extends State<sms> {
                                                         body: 'You Have To SMS '+message.sender.toString(),
                                                         scheduleTime: DateTime.now().add(Duration(hours: 1))
                                                     );
+                                                    persons.add(Person(title:
+                                                    'SMS Reminder',callerName:
+                                                    '${message.sender
+                                                        .toString()}',
+                                                      remTime: '${'1 '
+                                                          'Hours'}',));
+                                                    _saveData();
                                                     Fluttertoast.showToast(
                                                         msg: "Reminder is Set For After 1-Hr..",
                                                         toastLength: Toast.LENGTH_SHORT,
@@ -275,7 +294,7 @@ class _smsState extends State<sms> {
                                         SizedBox(height: 20,),
                                         InkWell(
                                           onTap: () async{
-                                            String mes = "Can't talk nowMessage me.";
+                                            String mes = "Can't talk now Message me.";
                                             List<String> recipents =
                                             [message.sender.toString()];
                                             String _result = await sendSMS(message: mes, recipients: recipents, sendDirect: true)

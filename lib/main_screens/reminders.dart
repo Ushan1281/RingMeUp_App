@@ -22,7 +22,7 @@ class _remindersState extends State<reminders> with TickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
-    TabController tabController = TabController(length:3, vsync: this);
+    TabController tabController = TabController(length:3, vsync: this, initialIndex: 1);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white24,

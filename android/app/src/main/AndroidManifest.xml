@@ -26,6 +26,7 @@
 
 
 
+
     <application
         tools:replace="android:label"
         android:label="RingMeUp"
@@ -63,6 +64,7 @@
                     <action android:name="io.flutter.app.notification.DELETE" />
                     <action android:name="io.flutter.app.notification.OPEN" />
                     <action android:name="android.speech.RecognitionService" />
+
 
             </intent-filter>
         </activity>

@@ -26,9 +26,10 @@ class NotificationServices{
         channelShowBadge: true,
         importance: Importance.max,playSound: true,priority: Priority.high,
         actions: [
-          AndroidNotificationAction(
-            'Call','CALL', cancelNotification: false
-          ),
+          // AndroidNotificationAction(
+          //   'Call','CALL', cancelNotification: false,
+          //
+          // ),
           AndroidNotificationAction(
               'CANCEL','CANCEL',cancelNotification: true
           ),
@@ -51,4 +52,5 @@ class NotificationServices{
          androidAllowWhileIdle: true
     );
   }
+
 }
