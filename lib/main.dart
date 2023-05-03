@@ -8,22 +8,26 @@ import 'notification_manager.dart';
 
 // NotificationServices notification=NotificationServices();
 void main() async{
+
    WidgetsFlutterBinding.ensureInitialized();
    PhoneState.phoneStateStream;
    PhoneState.phoneStateStream.listen((event) {
      if (event == PhoneStateStatus.CALL_ENDED) {
+       String incomingNumber= event?.index as String;
        NotificationServices().showNotification(
          title: 'Set Call Back Reminder',
-         body: 'You Ended Incoming Call',
+         body: 'You Ended Incoming Call'+incomingNumber,
        );
      }
      else if(event == PhoneStateStatus.CALL_INCOMING){
+       String incomingNumber= event?.index as String;
        NotificationServices().showNotification(
          title: 'Set Call Back Reminder',
-         body: 'You Have one Incoming Call',
+         body: 'You Ended Incoming Call'+incomingNumber,
        );
      }
    });
+
 
    runApp(MyApp());
 }
@@ -33,6 +37,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 class _MyAppState extends State<MyApp> {
+  CallLogs cl = new CallLogs();
   Telephony telephony = Telephony.instance;
   @override
   void initState() {
@@ -41,28 +46,17 @@ class _MyAppState extends State<MyApp> {
     PhoneState.phoneStateStream;
     PhoneState.phoneStateStream.listen((event) {
       if (event == PhoneStateStatus.CALL_INCOMING) {
-        // showOverlay((context, progress) => AlertDialog(
-        //   content: Container(
-        //     decoration: BoxDecoration(
-        //       color: Colors.cyan
-        //     ),
-        //     child: Column(
-        //       children: [
-        //         Text('data')
-        //       ],
-        //     ),
-        //   ),
-        // ));
+        /* This is a notification is used to show that in coming is there.
+        After clicking this notification (User can redirect to the RingMeUp
+        App to set reminder).*/
         NotificationServices().showNotification(
           title: 'Set Call Back Reminder',
           body: 'You Have one Incoming Call''\n''Want to add reminder',
         );
       }else if(event == PhoneStateStatus.CALL_ENDED){
-        // showOverlay((context, progress) => AlertDialog(
-        //   content: Container(
-        //     child: Text('dddddd'),
-        //   )
-        // ));
+        /* This is a notification is used to show that the app user ended
+           incoming-call / call. After clicking this notification (User can
+           redirect to the RingMeUp App to set reminder).*/
         NotificationServices().showNotification(
           title: 'Set Call Back Reminder',
           body: 'You Ended Incoming Call',

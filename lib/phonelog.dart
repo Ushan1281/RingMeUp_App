@@ -52,8 +52,6 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
       cl.getCallLogs();});
   }
 
-
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
@@ -75,6 +73,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
     prefs.setStringList('persons', newpersonJson);
   }
   int selectedValue=0;
+  String? user;
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
@@ -130,19 +129,17 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                  items: menuItems,
                                ).then((value) {
                                setState(() {
-                                 if (value != null) {
-                                   selectedValue = value;
-                                   // do something with the selected value
-                                 }
-                               });
+                                         if (value != null) {
+                                           selectedValue = value;
+                                         }
+                                    });
                                });
                           },
                           onPressed: () async{
                           NotificationServices().setNotification(
                               title: 'Call Reminder',
-                              body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
-                              scheduleTime:DateTime.now().add(Duration
-                                (seconds: selectedValue)),
+                              body: 'You Have To Call '+ snapshot.data!.elementAt(index).name.toString(),
+                              scheduleTime:DateTime.now().add(Duration(seconds: selectedValue)),
                           );
                           persons.add(Person(title: 'Call Reminder', callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'$selectedValue minutes'}',));_saveData();
                           Fluttertoast.showToast(
@@ -153,8 +150,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                               textColor: Colors.deepPurpleAccent,
                               fontSize: 16.0
                           );
-                        },child:
-                        Text("SET $selectedValue Min"),
+                        },child: Text("SET $selectedValue min"),
                         ),
                       ),
                     ), onTap: (){
@@ -166,7 +162,6 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                              elevation: 20,
                              content: SingleChildScrollView(
                                child:  Container(
-
                                  child: Center(
                                    child: Column(
                                      children: [
@@ -316,8 +311,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                        body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                        scheduleTime: DateTime.now().add(Duration(hours: 1)),
                                                    );
-                                                   persons.add(Person(title: 'Call Reminder', callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'1 Hours'}',));
-                                                   _saveData();
+                                                   persons.add(Person(title: 'Call Reminder', callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'1 Hours'}',));_saveData();
                                                    Fluttertoast.showToast(
                                                        msg: "Reminder is Set For After 1-Hr..",
                                                        toastLength: Toast.LENGTH_SHORT,
@@ -328,7 +322,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                    );
                                                    Navigator.pop(context);
                                                  }, child: Text("1 hours",
-                                               style:TextStyle(
+                                                   style:TextStyle(
                                                    fontFamily: "Rubik",
                                                    fontSize: 20,
                                                    fontWeight: FontWeight.bold,
@@ -343,7 +337,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                       height: 50,
                                          width: 180,
                                          decoration: BoxDecoration(
-                                          
+
                                          ),
                                          child: TextFormField(
                                            decoration: InputDecoration(

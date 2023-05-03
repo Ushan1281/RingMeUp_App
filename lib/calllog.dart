@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 class CallLogs{
   // Call Logs with the outgoing and incoming time...........................
   Future<Iterable<CallLogEntry>> getCallLogs(){
+
     return CallLog.get();
   }
   String formatDate(DateTime dt){
@@ -13,7 +14,6 @@ class CallLogs{
   }
 
   getTitle(CallLogEntry entry){
-    print(entry.name);
     if(entry.name == null)
       return Text(entry.number.toString());
     if(entry.name.toString().isEmpty)
@@ -27,10 +27,10 @@ class CallLogs{
     Duration d1 = Duration(seconds: duration);
     String formatedDuration = "";
     if(d1.inHours > 0){
-      formatedDuration += d1.inHours.toString() + "h ";
+      formatedDuration += d1.inHours.toString() + "h";
     }
     if(d1.inMinutes > 0){
-      formatedDuration += d1.inMinutes.toString() + "m ";
+      formatedDuration += d1.inMinutes.toString() + "m";
     }
     if(d1.inSeconds > 0){
       formatedDuration += d1.inSeconds.toString() + "s";
