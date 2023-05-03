@@ -141,7 +141,8 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                               body: 'You Have To Call '+ snapshot.data!.elementAt(index).name.toString(),
                               scheduleTime:DateTime.now().add(Duration(seconds: selectedValue)),
                           );
-                          persons.add(Person(title: 'Call Reminder', callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'$selectedValue minutes'}',));_saveData();
+                          persons.add(Person(title:'Call Reminder', callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'$selectedValue minutes'}',));
+                          _saveData();
                           Fluttertoast.showToast(
                               msg: "Reminder is Set For After $selectedValue Minutes",
                               toastLength: Toast.LENGTH_SHORT,
@@ -150,10 +151,12 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                               textColor: Colors.deepPurpleAccent,
                               fontSize: 16.0
                           );
-                        },child: Text("SET $selectedValue min"),
+                        },
+                          child: Text("SET $selectedValue min"),
                         ),
                       ),
                     ), onTap: (){
+                      // On tap event is call from here to show the dialog box..
                      setState(() {
                        showDialog(
                            context: context,
@@ -209,7 +212,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                    body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                    scheduleTime: DateTime.now().add(Duration(minutes: 5)),
                                                  );
-                                                 persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'5 minutes'}',));
+                                                 persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'5 minutes'}'));
                                                  _saveData();
                                                  Fluttertoast.showToast(
                                                      msg: "Reminder is Set For After 5-Min",
@@ -240,7 +243,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                    body: 'You Have To Call '+snapshot.data!.elementAt(index).name.toString(),
                                                    scheduleTime: DateTime.now().add(Duration(minutes: 10))
                                                );
-                                               persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'10 minutes'}',));
+                                               persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime:'${'10 minutes'}',));
                                                _saveData();
                                                Fluttertoast.showToast(
                                                    msg: "Reminder is Set For After 10-Min",
@@ -279,7 +282,7 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                        scheduleTime:
                                                        DateTime.now().add(Duration(minutes: 30))
                                                    );
-                                                   persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'30'' minutes'}',));
+                                                   persons.add(Person(title: 'Call Reminder',callerName: '${snapshot.data!.elementAt(index).name.toString()}', remTime: '${'30'' minutes'}'));
                                                    _saveData();
                                                    Fluttertoast.showToast(
                                                        msg: "Reminder is Set For After 30-Min",
@@ -290,15 +293,14 @@ class _phonelogState extends State<phonelog> with  WidgetsBindingObserver {
                                                        fontSize: 16.0
                                                    );
                                                    Navigator.pop(context);
-                                                 }, child:
-                                             Text("30 min.",
-                                               style:TextStyle(
-                                                   fontFamily: "Rubik",
-                                                   fontSize: 20,
-                                                   fontWeight: FontWeight.bold,
-                                                   color: Colors.white
-                                               ),
-                                             )),
+                                                 }, child: Text("30 min.",
+                                                   style:TextStyle(
+                                                       fontFamily: "Rubik",
+                                                       fontSize: 20,
+                                                       fontWeight: FontWeight.bold,
+                                                       color: Colors.white
+                                                   ),
+                                                 )),
                                            ),
                                            SizedBox(width: 10,),
                                            SizedBox(

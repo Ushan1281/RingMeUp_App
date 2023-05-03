@@ -19,11 +19,8 @@ class NotificationServices{
         notificationResponse ) async{});
   }
 
-  /* Show Notification....*/
-  /*
-  This is a Notification Detail function which show how its look like when
-  the user set the notification.
-  */
+// Show Notification....
+
   notificationDetails(){
     return NotificationDetails(
       android: AndroidNotificationDetails('channelId','ChannelName',
@@ -31,14 +28,7 @@ class NotificationServices{
         importance: Importance.max,playSound: true,priority: Priority.high,
         actions: [
           AndroidNotificationAction(
-            'Call','CALL', cancelNotification: false,inputs: const
-          <AndroidNotificationActionInput>[
-
-          ],
-          ),
-          AndroidNotificationAction(
               'CANCEL','CANCEL',cancelNotification: true
-
           ),
         ],
       )
